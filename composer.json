@@ -1,0 +1,13 @@
+{
+    "name": "gaoussou/slim0319",
+    "type": "project",
+    "authors": [
+        {
+            "name": "gaston223",
+            "email": "g.coulibalyy@gmail.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "^3.12"
+    }
+}
