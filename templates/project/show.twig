@@ -3,4 +3,14 @@
 {% block body %}
 
     <h1>Detail du projet (Vue Twig)</h1>
+    <h2>{{ project.name}}</h2>
+    <p>{{ project.description | raw('html') }}</p>
+    <p>Développé du {{ project.startedAt.format('d/m/Y') }} au {{ project.finishedAt.format('d/m/Y à H:i:s' ) }}</p>
+    <h2>Les langages utilisées :</h2>
+        <ul>
+            {% for language in project.languages %}
+            <li> {{ language }} </li>
+            {% endfor %}
+        </ul>
+
 {% endblock body %}
