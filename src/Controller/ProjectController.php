@@ -31,6 +31,7 @@ class ProjectController
     )
     {
         //on retourne une reponse
-        return $response->getBody()->write('<h1>Création du projet</h1>');
+        //return $response->getBody()->write('<h1>Création du projet</h1>');
+        return $this->twig->render($response, 'project/creation.twig');
     }
 }
