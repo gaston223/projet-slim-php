@@ -2,6 +2,7 @@
 
 {% block body %}
 
+    {#{dump(project) }#}
     <h1>Detail du projet (Vue Twig)</h1>
     <h2>{{ project.name}}</h2>
     <p>{{ project.description | raw('html') }}</p>
@@ -9,8 +10,7 @@
     <h2>Les langages utilisées :</h2>
         <ul>
             {% for language in project.languages %}
-            <li> {{ language }} </li>
+            <li> {{ language | upper}} </li>
             {% endfor %}
         </ul>
-
 {% endblock body %}

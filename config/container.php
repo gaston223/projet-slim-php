@@ -4,20 +4,30 @@
 use App\Controller\AboutController;
 use App\Controller\ContactController;
 use App\Controller\ProjectController;
+use App\Model\Connection;
+use App\Repository\ProjectRepository;
 use Psr\Container\ContainerInterface;
+use Slim\Http\Environment;
+use Slim\Http\Uri;
+use Slim\Views\Twig;
+use Twig\Extension\DebugExtension;
 
 $container = $app->getContainer();
 
 // Register component on container
-$container['view'] = function ($container) {
-    $view = new \Slim\Views\Twig(dirname(__DIR__). '/templates', [
+$container['view'] = function (ContainerInterface $container) {
+    $view = new Twig(dirname(__DIR__). '/templates', [
         'cache' => false,
         'strict_variables'=>true,
+        'debug'=>true,
     ]);
 
-    // Instantiate and add Slim specific extension
+    // Ajout de l'extension de debug Twig
+    $view->addExtension(new DebugExtension());
+
+    //Extension de la base Twig
     $router = $container->get('router');
-    $uri = \Slim\Http\Uri::createFromEnvironment(new \Slim\Http\Environment($_SERVER));
+    $uri = Uri::createFromEnvironment(new Environment($_SERVER));
     $view->addExtension(new Slim\Views\TwigExtension($router, $uri));
 
     return $view;
@@ -28,7 +38,10 @@ $container['view'] = function ($container) {
 $container[ProjectController::class]=function (ContainerInterface $container) {
     //On retourne une instance de ProjectController en envoyant Twig
     //On obtient Twig en envoyant la clé View du conteneur
-    return new ProjectController($container->get('view'));
+    return new ProjectController(
+        $container->get('view'),
+        $container->get(ProjectRepository::class)
+    );
 };
 
 
@@ -38,4 +51,17 @@ $container [ContactController::class]=function (ContainerInterface $container) {
 
 $container [AboutController::class]=function (ContainerInterface $container) {
     return new AboutController($container->get('view'));
+};
+
+$container [ProjectRepository::class]=function (ContainerInterface $container) {
+    return new ProjectRepository($container->get(Connection::class));
+};
+
+$container[Connection::class]=function (ContainerInterface $container){
+    return new Connection(
+     $container ['settings']['database_name'],
+     $container ['settings']['database_user'],
+     $container ['settings']['database_pass']
+
+    );
 };

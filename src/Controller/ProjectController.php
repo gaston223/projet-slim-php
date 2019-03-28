@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ProjectRepository;
 use DateTime;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,10 +15,15 @@ class ProjectController
      * @var Twig
      */
     private $twig;
+    /**
+     * @var ProjectRepository
+     */
+    private $projectRepository;
 
-    public function __construct(Twig $twig)
+    public function __construct(Twig $twig, ProjectRepository $projectRepository)
     {
         $this->twig = $twig;
+        $this->projectRepository = $projectRepository;
     }
 
     /**
@@ -33,7 +39,7 @@ class ProjectController
         $finishedAt = new \DateTime();
         $startedAt = new \DateTime('2019-01-23');
         $project=[
-            "id"=>100,
+            "id"=>1,
             "name"=>"Projet FULL PHP",
             "startedAt"=>$startedAt,
             "finishedAt"=>$finishedAt,
